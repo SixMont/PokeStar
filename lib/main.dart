@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        fontFamily: 'Google',
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
