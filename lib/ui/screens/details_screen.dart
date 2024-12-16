@@ -10,7 +10,7 @@ class DetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
