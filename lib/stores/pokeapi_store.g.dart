@@ -16,12 +16,12 @@ mixin _$PokeApiStore on _PokeApiStoreBase, Store {
       (_$pokeAPIComputed ??= Computed<PokeAPI>(() => super.pokeAPI,
               name: '_PokeApiStoreBase.pokeAPI'))
           .value;
-  Computed<Pokemon>? _$pokemonAtualComputed;
+  Computed<Pokemon>? _$pokemonActualComputed;
 
   @override
-  Pokemon get pokemonAtual =>
-      (_$pokemonAtualComputed ??= Computed<Pokemon>(() => super.pokemonAtual,
-              name: '_PokeApiStoreBase.pokemonAtual'))
+  Pokemon get pokemonActual =>
+      (_$pokemonActualComputed ??= Computed<Pokemon>(() => super.pokemonActual,
+              name: '_PokeApiStoreBase.pokemonActual'))
           .value;
 
   late final _$_pokeAPIAtom =
@@ -44,23 +44,23 @@ mixin _$PokeApiStore on _PokeApiStoreBase, Store {
     });
   }
 
-  late final _$_pokemonAtualAtom =
-      Atom(name: '_PokeApiStoreBase._pokemonAtual', context: context);
+  late final _$_pokemonActualAtom =
+      Atom(name: '_PokeApiStoreBase._pokemonActual', context: context);
 
   @override
-  Pokemon get _pokemonAtual {
-    _$_pokemonAtualAtom.reportRead();
-    return super._pokemonAtual;
+  Pokemon get _pokemonActual {
+    _$_pokemonActualAtom.reportRead();
+    return super._pokemonActual;
   }
 
-  bool __pokemonAtualIsInitialized = false;
+  bool __pokemonActualIsInitialized = false;
 
   @override
-  set _pokemonAtual(Pokemon value) {
-    _$_pokemonAtualAtom.reportWrite(
-        value, __pokemonAtualIsInitialized ? super._pokemonAtual : null, () {
-      super._pokemonAtual = value;
-      __pokemonAtualIsInitialized = true;
+  set _pokemonActual(Pokemon value) {
+    _$_pokemonActualAtom.reportWrite(
+        value, __pokemonActualIsInitialized ? super._pokemonActual : null, () {
+      super._pokemonActual = value;
+      __pokemonActualIsInitialized = true;
     });
   }
 
@@ -80,23 +80,23 @@ mixin _$PokeApiStore on _PokeApiStoreBase, Store {
     });
   }
 
-  late final _$posicaoAtualAtom =
-      Atom(name: '_PokeApiStoreBase.posicaoAtual', context: context);
+  late final _$positionActualAtom =
+      Atom(name: '_PokeApiStoreBase.positionActual', context: context);
 
   @override
-  int get posicaoAtual {
-    _$posicaoAtualAtom.reportRead();
-    return super.posicaoAtual;
+  int get positionActual {
+    _$positionActualAtom.reportRead();
+    return super.positionActual;
   }
 
-  bool _posicaoAtualIsInitialized = false;
+  bool _positionActualIsInitialized = false;
 
   @override
-  set posicaoAtual(int value) {
-    _$posicaoAtualAtom.reportWrite(
-        value, _posicaoAtualIsInitialized ? super.posicaoAtual : null, () {
-      super.posicaoAtual = value;
-      _posicaoAtualIsInitialized = true;
+  set positionActual(int value) {
+    _$positionActualAtom.reportWrite(
+        value, _positionActualIsInitialized ? super.positionActual : null, () {
+      super.positionActual = value;
+      _positionActualIsInitialized = true;
     });
   }
 
@@ -140,9 +140,9 @@ mixin _$PokeApiStore on _PokeApiStoreBase, Store {
   String toString() {
     return '''
 corPokemon: ${corPokemon},
-posicaoAtual: ${posicaoAtual},
+positionActual: ${positionActual},
 pokeAPI: ${pokeAPI},
-pokemonAtual: ${pokemonAtual}
+pokemonActual: ${pokemonActual}
     ''';
   }
 }
