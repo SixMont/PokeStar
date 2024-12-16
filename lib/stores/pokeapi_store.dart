@@ -42,7 +42,7 @@ abstract class _PokeApiStoreBase with Store {
   }
 
   @action
-  setPokemonAtual({required int index}) {
+  setPokemonActual({required int index}) {
     _pokemonActual = _pokeAPI.pokemon[index];
     corPokemon = ConstsApp.getColorType(type: _pokemonActual.type[0]);
     positionActual = index;
