@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:poke_star/stores/pokeapi_store.dart';
+import 'package:poke_star/ui/screens/home_screen.dart';
 import 'package:poke_star/ui/screens/details_screen.dart';
 import 'package:poke_star/ui/screens/favorites_screen.dart';
 import 'package:poke_star/ui/screens/home_screen.dart';
