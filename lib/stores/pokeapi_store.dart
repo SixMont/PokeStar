@@ -51,7 +51,7 @@ abstract class _PokeApiStoreBase with Store {
   @action
   Widget getImage({required String numero}) {
     return CachedNetworkImage(
-      placeholder: (context, url) => new Container(
+      placeholder: (context, url) => Container(
         color: Colors.transparent,
       ),
       imageUrl:
@@ -61,7 +61,7 @@ abstract class _PokeApiStoreBase with Store {
 
   Future<PokeAPI?> loadPokeAPI() async {
     try {
-      final response = await http.get(ConstsAPI.pokeapiURL as Uri);
+      final response = await http.get(Uri.parse(ConstsAPI.pokeapiURL));
       var decodeJson = jsonDecode(response.body);
       return PokeAPI.fromJson(decodeJson);
     } catch (error, stacktrace) {
