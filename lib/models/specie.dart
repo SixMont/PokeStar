@@ -28,14 +28,14 @@ class Specie {
     required this.captureRate,
     required this.color,
     required this.evolutionChain,
-    this.evolvesFromSpecies, // Make nullable
+    this.evolvesFromSpecies,
     required this.flavorTextEntries,
     required this.formsSwitchable,
     required this.genderRate,
     required this.genera,
     required this.generation,
     required this.growthRate,
-    this.habitat, // Make nullable
+    this.habitat,
     required this.hasGenderDifferences,
     required this.hatchCounter,
     required this.id,
