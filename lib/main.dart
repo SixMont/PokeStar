@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:poke_star/stores/pokeapiv2_store.dart';
 import 'package:provider/provider.dart';
 import 'package:poke_star/stores/pokeapi_store.dart';
 import 'package:poke_star/ui/screens/home_screen.dart';
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<PokeApiStore>(create: (_) => PokeApiStore()),
+        Provider<PokeApiV2Store>(create: (_) => PokeApiV2Store()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

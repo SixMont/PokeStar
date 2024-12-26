@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:poke_star/stores/pokeapi_store.dart';
+import 'package:poke_star/stores/pokeapiv2_store.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -13,8 +14,8 @@ class HomeScreen extends StatelessWidget {
         title: const Text('Poké List'),
         centerTitle: true,
       ),
-      body: Consumer<PokeApiStore>(
-        builder: (context, pokeApiStore, child) {
+      body: Consumer2<PokeApiStore, PokeApiV2Store>(
+        builder: (context, pokeApiStore, pokeApiV2Store, child) {
           if (pokeApiStore.pokeAPI.pokemon.isEmpty) {
             pokeApiStore.fetchPokemonList();
           }
@@ -38,15 +39,12 @@ class HomeScreen extends StatelessWidget {
                   final pokemon = pokeApiStore.getPokemon(index: index);
 
                   return GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (_) {
-                          return AlertDialog(
-                          title: Text(pokemon.name),
-                          content: Text('Numéro: ${pokemon.num}'),
-                        );
-                        },
+                    onTap: () async {
+                      await pokeApiV2Store.getInfoSpecie(pokemon.name);
+                      Navigator.pushNamed(
+                        context,
+                        '/detail',
+                        arguments: pokemon,
                       );
                     },
                     child: Card(
