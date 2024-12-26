@@ -88,6 +88,12 @@ class DetailScreen extends StatelessWidget {
                             labelColor: Colors.black,
                             unselectedLabelColor: Colors.grey,
                             indicatorColor: Colors.black,
+                            labelStyle: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 2.5,
+                              fontFamily: 'Google',
+                            ),
                             tabs: [
                               Tab(text: "About"),
                               Tab(text: "Evolution"),
@@ -101,13 +107,19 @@ class DetailScreen extends StatelessWidget {
                                 Center(
                                   child: Text(
                                     "Evolution content here",
-                                    style: TextStyle(fontSize: 16, color: Colors.grey, letterSpacing: 2.5),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey,
+                                        letterSpacing: 2.5),
                                   ),
                                 ),
                                 Center(
                                   child: Text(
                                     "Status content here",
-                                    style: TextStyle(fontSize: 16, color: Colors.grey, letterSpacing: 2.5),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey,
+                                        letterSpacing: 2.5),
                                   ),
                                 ),
                               ],
