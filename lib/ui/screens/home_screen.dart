@@ -40,11 +40,11 @@ class HomeScreen extends StatelessWidget {
 
                   return GestureDetector(
                     onTap: () async {
+                      pokeApiStore.setPokemonActual(index: index);
                       await pokeApiV2Store.getInfoSpecie(pokemon.name);
                       Navigator.pushNamed(
                         context,
                         '/detail',
-                        arguments: pokemon,
                       );
                     },
                     child: Card(

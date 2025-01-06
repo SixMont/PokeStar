@@ -2,30 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:poke_star/consts/consts_app.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/pokeapi.dart';
 import '../../stores/pokeapi_store.dart';
 import '../../stores/pokeapiv2_store.dart';
-import 'about_tab.dart';
+import 'components/about_tab.dart';
 
 class DetailScreen extends StatelessWidget {
   const DetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final pokemon = ModalRoute.of(context)!.settings.arguments as Pokemon;
-    Color? corPokemon = ConstsApp.getColorType(type: pokemon.type[0]);
+
     final pokeApiStore = Provider.of<PokeApiStore>(context);
     final pokeApiV2Store = Provider.of<PokeApiV2Store>(context, listen: false);
+    final pokemon = pokeApiStore.pokemonActual;
+    Color? corPokemon = ConstsApp.getColorType(type: pokemon.type[0]);
     int currentIndex = pokeApiStore.pokeAPI.pokemon.indexOf(pokemon);
 
     void navigateToPokemon(int index) {
       final newPokemon = pokeApiStore.getPokemon(index: index);
+      pokeApiStore.setPokemonActual(index: index);
       pokeApiV2Store.getInfoPokemon(newPokemon.name);
       pokeApiV2Store.getInfoSpecie(newPokemon.name);
       Navigator.pushReplacementNamed(
         context,
         '/detail',
-        arguments: newPokemon,
       );
     }
 

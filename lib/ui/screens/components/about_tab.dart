@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../models/specie.dart';
-import '../../stores/pokeapiv2_store.dart';
+import '../../../models/specie.dart';
+import '../../../stores/pokeapiv2_store.dart';
 import 'package:provider/provider.dart';
 
 class AboutTab extends StatelessWidget {
