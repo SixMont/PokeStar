@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:poke_star/stores/pokeapi_store.dart';
-import 'package:poke_star/stores/pokeapiv2_store.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../consts/consts_app.dart';
 import '../../models/pokeapi.dart';
 import '../../states/pokeapi_cubit.dart';
 import '../../states/pokeapi_state.dart';
+import '../../states/pokeapiv2_cubit.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -90,6 +87,7 @@ class HomeScreen extends StatelessWidget {
                       return GestureDetector(
                         onTap: () async {
                           pokeApiCubit.setPokemonActual(index: index);
+                          context.read<PokeApiV2Cubit>().getInfoSpecie(pokemon.name);
                           Navigator.pushNamed(
                             context,
                             '/detail',

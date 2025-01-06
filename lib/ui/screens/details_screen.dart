@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:poke_star/consts/consts_app.dart';
 import 'package:provider/provider.dart';
 
-import '../../stores/pokeapi_store.dart';
-import '../../stores/pokeapiv2_store.dart';
+import '../../states/pokeapi_cubit.dart';
+import '../../states/pokeapiv2_cubit.dart';
 import 'components/about_tab.dart';
 
 class DetailScreen extends StatelessWidget {
@@ -11,18 +11,17 @@ class DetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    final pokeApiStore = Provider.of<PokeApiStore>(context);
-    final pokeApiV2Store = Provider.of<PokeApiV2Store>(context, listen: false);
-    final pokemon = pokeApiStore.pokemonActual;
+    final pokeApiCubit = context.read<PokeApiCubit>();
+    final pokeApiCubitV2 = context.read<PokeApiV2Cubit>();
+    final pokemon = pokeApiCubit.pokemonActual!;
     Color? corPokemon = ConstsApp.getColorType(type: pokemon.type[0]);
-    int currentIndex = pokeApiStore.pokeAPI.pokemon.indexOf(pokemon);
+    int currentIndex = pokeApiCubit.positionActual!;
+    int totalPokemon = pokeApiCubit.totalPokemon;
 
     void navigateToPokemon(int index) {
-      final newPokemon = pokeApiStore.getPokemon(index: index);
-      pokeApiStore.setPokemonActual(index: index);
-      pokeApiV2Store.getInfoPokemon(newPokemon.name);
-      pokeApiV2Store.getInfoSpecie(newPokemon.name);
+      pokeApiCubit.setPokemonActual(index: index);
+      final newPokemon = pokeApiCubit.pokemonActual!;
+      pokeApiCubitV2.getInfoSpecie(newPokemon.name);
       Navigator.pushReplacementNamed(
         context,
         '/detail',
@@ -147,9 +146,9 @@ class DetailScreen extends StatelessWidget {
                     tag: pokemon.num,
                     child: SizedBox(
                       height: 200,
-                      child: Consumer<PokeApiStore>(
-                        builder: (context, pokeApiStore, child) {
-                          return pokeApiStore.getImage(numero: pokemon.num);
+                      child: Consumer<PokeApiCubit>(
+                        builder: (context, pokeApiCubit, child) {
+                          return pokeApiCubit.getImage(numero: pokemon.num);
                         },
                       ),
                     ),
@@ -181,7 +180,7 @@ class DetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            if (currentIndex < pokeApiStore.pokeAPI.pokemon.length - 1)
+            if (currentIndex < totalPokemon - 1)
               Positioned(
                 top: MediaQuery.of(context).size.height / 3 - 130,
                 right: 16,
@@ -197,8 +196,7 @@ class DetailScreen extends StatelessWidget {
                       icon: const Icon(Icons.arrow_forward_ios,
                           color: Colors.white, size: 22),
                       onPressed: () {
-                        if (currentIndex <
-                            pokeApiStore.pokeAPI.pokemon.length - 1) {
+                        if (currentIndex < totalPokemon - 1) {
                           navigateToPokemon(currentIndex + 1);
                         }
                       },
