@@ -5,6 +5,7 @@ import '../../consts/consts_app.dart';
 import '../../models/pokeapi.dart';
 import '../../states/pokeapi_cubit.dart';
 import '../../states/pokeapi_state.dart';
+import '../../states/pokeapiv2_cubit.dart';
 
 class HomeScreenContent extends StatelessWidget {
   const HomeScreenContent({super.key});
@@ -12,6 +13,7 @@ class HomeScreenContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pokeApiCubit = context.read<PokeApiCubit>();
+    final pokeApiV2Cubit = context.read<PokeApiV2Cubit>();
 
     return BlocBuilder<PokeApiCubit, PokeApiState>(
       builder: (context, state) {
@@ -79,6 +81,7 @@ class HomeScreenContent extends StatelessWidget {
                     return GestureDetector(
                       onTap: () async {
                         pokeApiCubit.setPokemonActual(index: index);
+                        await pokeApiV2Cubit.getInfoSpecie(pokemon.name);
                         Navigator.pushNamed(context, '/detail');
                       },
                       child: Container(
@@ -208,4 +211,3 @@ class HomeScreenContent extends StatelessWidget {
     );
   }
 }
-

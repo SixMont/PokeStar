@@ -4,7 +4,6 @@ import 'package:poke_star/repository/pokerepository.dart';
 import 'package:poke_star/repository/pokerepositoryv2.dart';
 import 'package:poke_star/states/pokeapi_cubit.dart';
 import 'package:poke_star/states/pokeapiv2_cubit.dart';
-import 'package:poke_star/ui/screens/home_screen.dart';
 import 'package:poke_star/ui/screens/details_screen.dart';
 import 'package:poke_star/ui/screens/main_screen.dart';
 

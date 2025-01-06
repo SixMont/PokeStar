@@ -138,8 +138,8 @@ class PokeApiCubit extends Cubit<PokeApiState> {
     emit(PokeApiLoaded(
       pokeAPI: state.pokeAPI,
       filteredPokemonList: state.filteredPokemonList,
-      pokemonAtual: state.pokemonAtual,
-      posicaoAtual: state.posicaoAtual,
+      pokemonActual: state.pokemonActual,
+      positionActual: state.positionActual,
       corPokemon: state.corPokemon,
       searchQuery: state.searchQuery,
     ));
