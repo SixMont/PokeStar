@@ -5,9 +5,9 @@ abstract class PokeApiState {
 
   get filteredPokemonList => null;
 
-  get pokemonAtual => null;
+  get pokemonActual => null;
 
-  get posicaoAtual => null;
+  get positionActual => null;
 
   get corPokemon => null;
 
@@ -24,9 +24,9 @@ class PokeApiLoaded extends PokeApiState {
   @override
   final List<Pokemon> filteredPokemonList;
   @override
-  final Pokemon? pokemonAtual;
+  final Pokemon? pokemonActual;
   @override
-  final int? posicaoAtual;
+  final int? positionActual;
   @override
   final dynamic corPokemon;
   @override
@@ -35,8 +35,8 @@ class PokeApiLoaded extends PokeApiState {
   PokeApiLoaded({
     required this.pokeAPI,
     required this.filteredPokemonList,
-    this.pokemonAtual,
-    this.posicaoAtual,
+    this.pokemonActual,
+    this.positionActual,
     this.corPokemon,
     this.searchQuery = '',
   });
@@ -51,8 +51,8 @@ class PokeApiLoaded extends PokeApiState {
     return PokeApiLoaded(
       pokeAPI: pokeAPI,
       filteredPokemonList: filteredPokemonList ?? this.filteredPokemonList,
-      pokemonAtual: pokemonAtual ?? this.pokemonAtual,
-      posicaoAtual: posicaoAtual ?? this.posicaoAtual,
+      pokemonActual: pokemonAtual ?? this.pokemonActual,
+      positionActual: posicaoAtual ?? this.positionActual,
       corPokemon: corPokemon ?? this.corPokemon,
       searchQuery: searchQuery ?? this.searchQuery,
     );

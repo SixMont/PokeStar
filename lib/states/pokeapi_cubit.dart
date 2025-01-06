@@ -21,6 +21,12 @@ class PokeApiCubit extends Cubit<PokeApiState> {
 
   PokeApiCubit(this._repository) : super(PokeApiInitial());
 
+  /// Renvoie le Pokémon actuel.
+  Pokemon? get pokemonActual => _pokemonActual;
+
+  /// Renvoie le nombre total de Pokémon.
+  int get totalPokemon => _allPokemon.length;
+
   /// Récupère la liste des Pokémon depuis le dépôt.
   Future<void> fetchPokemonList() async {
     emit(PokeApiLoading());
@@ -43,6 +49,7 @@ class PokeApiCubit extends Cubit<PokeApiState> {
       ));
     }
   }
+
 
   /// Définit le Pokémon actuel et met à jour la couleur et la position.
   void setPokemonActual({required int index}) {
