@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:poke_star/repository/pokerepository.dart';
 import 'package:poke_star/states/pokeapi_cubit.dart';
-import 'package:poke_star/ui/screens/home_screen.dart';
 import 'package:poke_star/ui/screens/details_screen.dart';
-import 'package:poke_star/ui/screens/favorites_screen.dart';
+import 'package:poke_star/ui/screens/main_screen.dart';
 
 import 'consts/consts_api.dart';
+import 'music/music_player.dart';
 
 void main() {
   runApp(const MyApp());
+  MusicPlayer.playMusic(); // Démarrez la musique de fond
 }
 
 class MyApp extends StatelessWidget {
@@ -27,9 +28,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'PokeStar',
         routes: {
-          '/home': (context) => const HomeScreen(),
+          '/home': (context) => const MainScreen(),
           '/detail': (context) => const DetailScreen(),
-          '/favorite': (context) => const FavoritesScreen(),
         },
         initialRoute: '/home',
         theme: ThemeData(
