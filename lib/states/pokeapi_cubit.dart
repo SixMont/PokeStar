@@ -11,9 +11,13 @@ class PokeApiCubit extends Cubit<PokeApiState> {
 
   String _searchQuery = ''; // Requête de recherche pour filtrer les Pokémon.
   List<Pokemon> _allPokemon = []; // Liste complète de Pokémon.
+  final List<Pokemon> _favoritePokemon = []; // Liste des Pokémon favoris.
+  List<Pokemon> favoritePokemonList = [];
+  String? selectedFavorite;
   Pokemon? _pokemonActual; // Pokémon actuel sélectionné.
   Color? corPokemon; // Couleur du Pokémon actuel.
   int? positionActual; // Position actuelle du Pokémon.
+  String _selectedFilter = 'None'; // Filtre sélectionné pour trier les favoris.
 
   PokeApiCubit(this._repository) : super(PokeApiInitial());
 
@@ -34,7 +38,7 @@ class PokeApiCubit extends Cubit<PokeApiState> {
     _searchQuery = query.trim().toLowerCase();
     if (state is PokeApiLoaded) {
       emit(PokeApiLoaded(
-        pokeAPI: PokeAPI(pokemon: filteredPokemonList),
+        pokeAPI: PokeAPI(pokemon: _allPokemon),
         filteredPokemonList: filteredPokemonList,
       ));
     }
@@ -51,6 +55,19 @@ class PokeApiCubit extends Cubit<PokeApiState> {
     ));
   }
 
+  /// Ajoute ou retire un Pokémon des favoris.
+  void toggleFavorite(Pokemon pokemon) {
+    if (_favoritePokemon.contains(pokemon)) {
+      _favoritePokemon.remove(pokemon);
+    } else {
+      _favoritePokemon.add(pokemon);
+    }
+    emit(PokeApiLoaded(
+      pokeAPI: PokeAPI(pokemon: _allPokemon),
+      filteredPokemonList: filteredFavoritePokemonList,
+    ));
+  }
+
   /// Renvoie la liste des Pokémon filtrés selon la requête de recherche.
   List<Pokemon> get filteredPokemonList {
     if (_searchQuery.isEmpty) {
@@ -61,6 +78,28 @@ class PokeApiCubit extends Cubit<PokeApiState> {
     pokemon.name.toLowerCase().contains(_searchQuery) ||
         pokemon.num.contains(_searchQuery))
         .toList();
+  }
+
+  /// Renvoie la liste des Pokémon favoris filtrés selon le filtre sélectionné.
+  List<Pokemon> get filteredFavoritePokemonList {
+    List<Pokemon> filteredList = _favoritePokemon;
+    if (_selectedFilter == 'Type') {
+      filteredList.sort((a, b) => a.type[0].compareTo(b.type[0]));
+    } else if (_selectedFilter == 'Name') {
+      filteredList.sort((a, b) => a.name.compareTo(b.name));
+    } else if (_selectedFilter == 'Number') {
+      filteredList.sort((a, b) => a.num.compareTo(b.num));
+    }
+    return filteredList;
+  }
+
+  /// Définit le filtre sélectionné et émet un nouvel état filtré.
+  void setFilter(String value) {
+    _selectedFilter = value;
+    emit(PokeApiLoaded(
+      pokeAPI: PokeAPI(pokemon: _allPokemon),
+      filteredPokemonList: filteredFavoritePokemonList,
+    ));
   }
 
   /// Renvoie une image du Pokémon correspondant au numéro.
@@ -86,4 +125,19 @@ class PokeApiCubit extends Cubit<PokeApiState> {
       return const Icon(Icons.error, size: 50, color: Colors.red);
     }
   }
+
+  void setSelectedFavorite(String? newValue) {
+    selectedFavorite = newValue;
+    emit(PokeApiLoaded(
+      pokeAPI: state.pokeAPI,
+      filteredPokemonList: state.filteredPokemonList,
+      pokemonAtual: state.pokemonAtual,
+      posicaoAtual: state.posicaoAtual,
+      corPokemon: state.corPokemon,
+      searchQuery: state.searchQuery,
+    ));
+  }
+
+  /// Retourne le filtre sélectionné.
+  String get selectedFilter => _selectedFilter;
 }

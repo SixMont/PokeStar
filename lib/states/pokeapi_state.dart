@@ -1,17 +1,35 @@
 import '../models/pokeapi.dart';
 
-abstract class PokeApiState {}
+abstract class PokeApiState {
+  get pokeAPI => null;
+
+  get filteredPokemonList => null;
+
+  get pokemonAtual => null;
+
+  get posicaoAtual => null;
+
+  get corPokemon => null;
+
+  get searchQuery => null;
+}
 
 class PokeApiInitial extends PokeApiState {}
 
 class PokeApiLoading extends PokeApiState {}
 
 class PokeApiLoaded extends PokeApiState {
+  @override
   final PokeAPI pokeAPI;
+  @override
   final List<Pokemon> filteredPokemonList;
+  @override
   final Pokemon? pokemonAtual;
+  @override
   final int? posicaoAtual;
+  @override
   final dynamic corPokemon;
+  @override
   final String searchQuery;
 
   PokeApiLoaded({
