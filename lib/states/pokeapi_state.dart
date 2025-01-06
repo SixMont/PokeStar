@@ -9,16 +9,16 @@ class PokeApiLoading extends PokeApiState {}
 class PokeApiLoaded extends PokeApiState {
   final PokeAPI pokeAPI;
   final List<Pokemon> filteredPokemonList;
-  final Pokemon? pokemonAtual;
-  final int? posicaoAtual;
+  final Pokemon? pokemonActual;
+  final int? positionActual;
   final dynamic corPokemon;
   final String searchQuery;
 
   PokeApiLoaded({
     required this.pokeAPI,
     required this.filteredPokemonList,
-    this.pokemonAtual,
-    this.posicaoAtual,
+    this.pokemonActual,
+    this.positionActual,
     this.corPokemon,
     this.searchQuery = '',
   });
@@ -33,8 +33,8 @@ class PokeApiLoaded extends PokeApiState {
     return PokeApiLoaded(
       pokeAPI: pokeAPI,
       filteredPokemonList: filteredPokemonList ?? this.filteredPokemonList,
-      pokemonAtual: pokemonAtual ?? this.pokemonAtual,
-      posicaoAtual: posicaoAtual ?? this.posicaoAtual,
+      pokemonActual: pokemonAtual ?? this.pokemonActual,
+      positionActual: posicaoAtual ?? this.positionActual,
       corPokemon: corPokemon ?? this.corPokemon,
       searchQuery: searchQuery ?? this.searchQuery,
     );

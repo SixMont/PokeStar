@@ -45,54 +45,83 @@ class StatusTab extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         } else if (state is PokeApiV2Loaded) {
           List<int> statusList = getStatusPokemon(state.pokeApiV2);
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: <Widget>[
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('Speed', style: TextStyle(fontSize: 16, color: Colors.grey)),
-                      SizedBox(height: 10),
-                      Text('Sp. Def', style: TextStyle(fontSize: 16, color: Colors.grey)),
-                      SizedBox(height: 10),
-                      Text('Sp. Atk', style: TextStyle(fontSize: 16, color: Colors.grey)),
-                      SizedBox(height: 10),
-                      Text('Defense', style: TextStyle(fontSize: 16, color: Colors.grey)),
-                      SizedBox(height: 10),
-                      Text('Attack', style: TextStyle(fontSize: 16, color: Colors.grey)),
-                      SizedBox(height: 10),
-                      Text('HP', style: TextStyle(fontSize: 16, color: Colors.grey)),
-                      SizedBox(height: 10),
-                      Text('Total', style: TextStyle(fontSize: 16, color: Colors.grey)),
+
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              return Center(
+                child: SizedBox(
+                  width: constraints.maxWidth,
+                  height: constraints.maxHeight,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text('Speed', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                                SizedBox(height: 10),
+                                Text('Sp. Def', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                                SizedBox(height: 10),
+                                Text('Sp. Atk', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                                SizedBox(height: 10),
+                                Text('Defense', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                                SizedBox(height: 10),
+                                Text('Attack', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                                SizedBox(height: 10),
+                                Text('HP', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                                SizedBox(height: 10),
+                                Text('Total', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                              ],
+                            ),
+                            const SizedBox(width: 20),
+                            Column(
+                              children: statusList
+                                  .map(
+                                    (stat) => Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 5),
+                                  child: Text(
+                                    stat.toString(),
+                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              )
+                                  .toList(),
+                            ),
+                            const SizedBox(width: 20),
+                            Column(
+                              children: statusList
+                                  .map(
+                                    (stat) {
+                                  final isTotal = stat == statusList.last;
+                                  final maxStat = isTotal ? 600 : 160;
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 8),
+                                    child: StatusBar(widthFactor: stat / maxStat),
+                                  );
+                                },
+                              )
+                                  .toList(),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                  const SizedBox(width: 10),
-                  Column(
-                    children: statusList.map((stat) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(stat.toString(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                    )).toList(),
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    children: statusList.map((stat) {
-                      final isTotal = stat == statusList.last;
-                      final maxStat = isTotal ? 600 : 160; // 960 pour le total, 160 pour les stats individuelles
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: StatusBar(widthFactor: stat / maxStat),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           );
         } else if (state is PokeApiV2Error) {
-          return Center(child: Text(state.message, style: const TextStyle(fontSize: 18, color: Colors.red)));
+          return Center(
+            child: Text(state.message, style: const TextStyle(fontSize: 18, color: Colors.red)),
+          );
         } else {
           return const Center(child: Text('Unknown state'));
         }

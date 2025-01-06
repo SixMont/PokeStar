@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:poke_star/consts/consts_app.dart';
+import 'package:poke_star/ui/screens/components/evolution_tab.dart';
 import 'package:poke_star/ui/screens/components/status_tab.dart';
 import 'package:provider/provider.dart';
 
@@ -104,15 +105,7 @@ class DetailScreen extends StatelessWidget {
                             child: TabBarView(
                               children: [
                                 AboutTab(),
-                                Center(
-                                  child: Text(
-                                    "Evolution content here",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey,
-                                        letterSpacing: 2.5),
-                                  ),
-                                ),
+                                EvolutionTab(),
                                 StatusTab()
                               ],
                             ),
