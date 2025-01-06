@@ -5,10 +5,14 @@ class MusicPlayer {
 
   // Méthode pour démarrer la musique
   static Future<void> playMusic() async {
-    const musicUrl = 'assets/music/generique_pokemon.mp3';
-    await _audioPlayer.setReleaseMode(ReleaseMode.loop); // Boucle infinie
-    await _audioPlayer.play(AssetSource(musicUrl));
-    await _audioPlayer.setVolume(1);
+    const musicUrl = 'music/generique_pokemon.mp3';
+    try {
+      await _audioPlayer.setReleaseMode(ReleaseMode.loop);
+      await _audioPlayer.play(AssetSource(musicUrl));
+      await _audioPlayer.setVolume(1);
+    } catch (e) {
+      print('Erreur lors de la lecture de la musique: $e');
+    }
   }
 
   // Méthode pour arrêter la musique
