@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:poke_star/stores/pokeapi_store.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:poke_star/repository/pokerepository.dart';
+import 'package:poke_star/states/pokeapi_cubit.dart';
 import 'package:poke_star/ui/screens/home_screen.dart';
 import 'package:poke_star/ui/screens/details_screen.dart';
 import 'package:poke_star/ui/screens/favorites_screen.dart';
+
+import 'consts/consts_api.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,9 +17,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
+    return MultiBlocProvider(
       providers: [
-        Provider<PokeApiStore>(create: (_) => PokeApiStore()),
+        BlocProvider<PokeApiCubit>(
+          create: (_) => PokeApiCubit(PokemonRepository(apiUrl: ConstsAPI.pokeapiURL)),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
