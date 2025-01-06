@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FavoritesScreen extends StatelessWidget {
@@ -7,9 +6,9 @@ class FavoritesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Favorites'),
+        title: const Text('Favorites'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Favorites Screen'),
       ),
     );
