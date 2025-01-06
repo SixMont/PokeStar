@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:poke_star/models/pokeapi.dart';
 import 'package:poke_star/states/pokeapiv2_cubit.dart';
 import 'package:poke_star/states/pokeapiv2_state.dart';
 import '../../../models/pokeapiv2.dart';
@@ -66,7 +65,7 @@ class AboutTab extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         letterSpacing: 2.5,
-                        color: Colors.black26,
+                        color: Colors.grey,
                       ),
                     ),
                     Text(
@@ -89,7 +88,7 @@ class AboutTab extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         letterSpacing: 2.5,
-                        color: Colors.black26,
+                        color: Colors.grey,
                       ),
                     ),
                     Text(
@@ -112,7 +111,7 @@ class AboutTab extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         letterSpacing: 2.5,
-                        color: Colors.black26,
+                        color: Colors.grey,
                       ),
                     ),
                     Text(

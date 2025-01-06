@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:poke_star/models/pokeapi.dart';
 import '../models/specie.dart';
 import '../repository/pokerepositoryv2.dart';
 import 'pokeapiv2_state.dart';

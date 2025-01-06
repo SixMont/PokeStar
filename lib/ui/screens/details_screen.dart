@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:poke_star/consts/consts_app.dart';
+import 'package:poke_star/ui/screens/components/status_tab.dart';
 import 'package:provider/provider.dart';
 
 import '../../states/pokeapi_cubit.dart';
@@ -112,15 +113,7 @@ class DetailScreen extends StatelessWidget {
                                         letterSpacing: 2.5),
                                   ),
                                 ),
-                                Center(
-                                  child: Text(
-                                    "Status content here",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey,
-                                        letterSpacing: 2.5),
-                                  ),
-                                ),
+                                StatusTab()
                               ],
                             ),
                           ),
