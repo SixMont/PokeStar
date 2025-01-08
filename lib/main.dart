@@ -4,6 +4,7 @@ import 'package:poke_star/repository/pokerepository.dart';
 import 'package:poke_star/states/pokeapi_cubit.dart';
 import 'package:poke_star/ui/screens/details_screen.dart';
 import 'package:poke_star/ui/screens/main_screen.dart';
+import 'package:poke_star/ui/screens/menu_screen.dart';
 
 import 'consts/consts_api.dart';
 import 'music/music_player.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/home': (context) => const MainScreen(),
           '/detail': (context) => const DetailScreen(),
+          '/menu': (context) => const MenuScreen(),
         },
         initialRoute: '/home',
         theme: ThemeData(

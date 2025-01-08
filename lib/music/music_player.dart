@@ -14,6 +14,10 @@ class MusicPlayer {
       print('Erreur lors de la lecture de la musique: $e');
     }
   }
+  // Méthode pour changer le volume
+  static Future<void> setVolume(double volume) async {
+    await _audioPlayer.setVolume(volume);
+  }
 
   // Méthode pour arrêter la musique
   static Future<void> stopMusic() async {

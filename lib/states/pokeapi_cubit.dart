@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:poke_star/states/pokeapi_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../consts/consts_app.dart';
 import '../../models/pokeapi.dart';
 import '../repository/pokerepository.dart';
-import '../../consts/consts_app.dart';
 
 class PokeApiCubit extends Cubit<PokeApiState> {
   final PokemonRepository _repository;
+  bool useAlternateUrl = false;
 
   String _searchQuery = ''; // Requête de recherche pour filtrer les Pokémon.
   List<Pokemon> _allPokemon = []; // Liste complète de Pokémon.
@@ -19,7 +21,25 @@ class PokeApiCubit extends Cubit<PokeApiState> {
   int? positionActual; // Position actuelle du Pokémon.
   String _selectedFilter = 'None'; // Filtre sélectionné pour trier les favoris.
 
-  PokeApiCubit(this._repository) : super(PokeApiInitial());
+  PokeApiCubit(this._repository) : super(PokeApiInitial()) {
+    _loadPreferences();
+  }
+
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    useAlternateUrl =
+        prefs.getString('selectedImageType') == 'Image Pokemon GO';
+    emit(PokeApiLoaded(
+      pokeAPI: PokeAPI(pokemon: _allPokemon),
+      filteredPokemonList: filteredPokemonList,
+    ));
+  }
+
+  Future<void> _savePreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedImageType',
+        useAlternateUrl ? 'Image Pokemon GO' : 'Original Image');
+  }
 
   /// Récupère la liste des Pokémon depuis le dépôt.
   Future<void> fetchPokemonList() async {
@@ -75,8 +95,8 @@ class PokeApiCubit extends Cubit<PokeApiState> {
     }
     return _allPokemon
         .where((pokemon) =>
-    pokemon.name.toLowerCase().contains(_searchQuery) ||
-        pokemon.num.contains(_searchQuery))
+            pokemon.name.toLowerCase().contains(_searchQuery) ||
+            pokemon.num.contains(_searchQuery))
         .toList();
   }
 
@@ -102,11 +122,21 @@ class PokeApiCubit extends Cubit<PokeApiState> {
     ));
   }
 
+  void toggleImageUrl() {
+    useAlternateUrl = !useAlternateUrl;
+    _savePreferences();
+    emit(PokeApiLoaded(
+      pokeAPI: PokeAPI(pokemon: _allPokemon),
+      filteredPokemonList: filteredPokemonList,
+    ));
+  }
+
   /// Renvoie une image du Pokémon correspondant au numéro.
   Widget getImage({required String numero}) {
     try {
-      final url =
-          'https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/images/$numero.png';
+      final url = useAlternateUrl
+          ? 'http://www.serebii.net/pokemongo/pokemon/$numero.png'
+          : 'https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/images/$numero.png';
       return Image.network(
         url,
         fit: BoxFit.cover,
