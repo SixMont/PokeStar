@@ -11,14 +11,14 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final PageController _pageController = PageController();
-  int _currentIndex = 0;
+  final PageController _pageController = PageController(); // Controller for page navigation.
+  int _currentIndex = 0; // Current index of the selected page.
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: _currentIndex == 0 ? Colors.red : Colors.yellow,
+        backgroundColor: _currentIndex == 0 ? Colors.red : Colors.yellow, // Change AppBar color based on the selected page.
         title: Stack(
           children: [
             Row(
@@ -32,7 +32,7 @@ class _MainScreenState extends State<MainScreen> {
                       curve: Curves.easeInOut,
                     );
                     setState(() {
-                      _currentIndex = 0;
+                      _currentIndex = 0; // Update the current index to 0.
                     });
                   },
                   child: Stack(
@@ -69,7 +69,7 @@ class _MainScreenState extends State<MainScreen> {
                       curve: Curves.easeInOut,
                     );
                     setState(() {
-                      _currentIndex = 1;
+                      _currentIndex = 1; // Update the current index to 1.
                     });
                   },
                   child: Stack(
@@ -91,8 +91,7 @@ class _MainScreenState extends State<MainScreen> {
                           fontFamily: 'Google',
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color:
-                              _currentIndex == 1 ? Colors.yellow : Colors.white,
+                          color: _currentIndex == 1 ? Colors.yellow : Colors.white,
                         ),
                         child: const Text('Pokestar'),
                       ),
@@ -105,7 +104,7 @@ class _MainScreenState extends State<MainScreen> {
               alignment: Alignment.center,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/menu');
+                  Navigator.pushNamed(context, '/menu'); // Navigate to the menu screen.
                 },
                 child: Image.asset(
                   'assets/images/logo.png',
@@ -120,12 +119,12 @@ class _MainScreenState extends State<MainScreen> {
         controller: _pageController,
         onPageChanged: (index) {
           setState(() {
-            _currentIndex = index;
+            _currentIndex = index; // Update the current index when the page changes.
           });
         },
         children: const [
-          HomeScreenContent(), // Contenu du Pokédex
-          FavoriteScreenContent(), // Contenu de Pokéstar
+          HomeScreenContent(), // Content of the Pokedex.
+          FavoriteScreenContent(), // Content of Pokestar.
         ],
       ),
     );
