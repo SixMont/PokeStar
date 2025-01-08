@@ -44,6 +44,13 @@ class PokeApiCubit extends Cubit<PokeApiState> {
   }
 
   // Fetch the list of Pokémon from the repository.
+  /// Renvoie le Pokémon actuel.
+  Pokemon? get pokemonActual => _pokemonActual;
+
+  /// Renvoie le nombre total de Pokémon.
+  int get totalPokemon => _allPokemon.length;
+
+  /// Récupère la liste des Pokémon depuis le dépôt.
   Future<void> fetchPokemonList() async {
     emit(PokeApiLoading());
     try {
@@ -165,8 +172,8 @@ class PokeApiCubit extends Cubit<PokeApiState> {
     emit(PokeApiLoaded(
       pokeAPI: state.pokeAPI,
       filteredPokemonList: state.filteredPokemonList,
-      pokemonAtual: state.pokemonAtual,
-      posicaoAtual: state.posicaoAtual,
+      pokemonActual: state.pokemonActual,
+      positionActual: state.positionActual,
       corPokemon: state.corPokemon,
       searchQuery: state.searchQuery,
     ));
