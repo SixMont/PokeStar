@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:poke_star/states/pokeapi_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/pokeapi.dart';
 import '../repository/pokerepository.dart';
@@ -11,7 +12,7 @@ class PokeApiCubit extends Cubit<PokeApiState> {
 
   String _searchQuery = ''; // Requête de recherche pour filtrer les Pokémon.
   List<Pokemon> _allPokemon = []; // Liste complète de Pokémon.
-  final List<Pokemon> _favoritePokemon = []; // Liste des Pokémon favoris.
+  List<Pokemon> _favoritePokemon = []; // Liste des Pokémon favoris.
   List<Pokemon> favoritePokemonList = [];
   String? selectedFavorite;
   Pokemon? _pokemonActual; // Pokémon actuel sélectionné.
@@ -19,13 +20,18 @@ class PokeApiCubit extends Cubit<PokeApiState> {
   int? positionActual; // Position actuelle du Pokémon.
   String _selectedFilter = 'None'; // Filtre sélectionné pour trier les favoris.
 
-  PokeApiCubit(this._repository) : super(PokeApiInitial());
+  PokeApiCubit(this._repository) : super(PokeApiInitial()) {
+    _loadFavorites();
+  }
 
   /// Renvoie le Pokémon actuel.
   Pokemon? get pokemonActual => _pokemonActual;
 
   /// Renvoie le nombre total de Pokémon.
   int get totalPokemon => _allPokemon.length;
+
+  /// Renvoie la liste des Pokémon favoris.
+  List<Pokemon> get favoritePokemon => _favoritePokemon;
 
   /// Récupère la liste des Pokémon depuis le dépôt.
   Future<void> fetchPokemonList() async {
@@ -142,6 +148,22 @@ class PokeApiCubit extends Cubit<PokeApiState> {
       positionActual: state.positionActual,
       corPokemon: state.corPokemon,
       searchQuery: state.searchQuery,
+    ));
+  }
+
+  Future<void> _saveFavorites() async {
+    final prefs = await SharedPreferences.getInstance();
+    final favoriteNames = _favoritePokemon.map((pokemon) => pokemon.name).toList();
+    await prefs.setStringList('favoritePokemons', favoriteNames);
+  }
+
+  Future<void> _loadFavorites() async {
+    final prefs = await SharedPreferences.getInstance();
+    final favoriteNames = prefs.getStringList('favoritePokemons') ?? [];
+    _favoritePokemon = _allPokemon.where((pokemon) => favoriteNames.contains(pokemon.name)).toList();
+    emit(PokeApiLoaded(
+      pokeAPI: PokeAPI(pokemon: _allPokemon),
+      filteredPokemonList: filteredPokemonList,
     ));
   }
 

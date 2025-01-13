@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:poke_star/consts/consts_app.dart';
 import 'package:poke_star/ui/screens/components/evolution_tab.dart';
 import 'package:poke_star/ui/screens/components/status_tab.dart';
@@ -8,8 +9,33 @@ import '../../states/pokeapi_cubit.dart';
 import '../../states/pokeapiv2_cubit.dart';
 import 'components/about_tab.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
   const DetailScreen({super.key});
+
+  @override
+  _DetailScreenState createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+  late ValueNotifier<bool> isFavorite;
+
+  @override
+  void initState() {
+    super.initState();
+    final pokeApiCubit = context.read<PokeApiCubit>();
+    final pokemon = pokeApiCubit.pokemonActual!;
+    isFavorite = ValueNotifier(pokeApiCubit.favoritePokemon.contains(pokemon));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final pokeApiCubit = context.read<PokeApiCubit>();
+    final pokemon = pokeApiCubit.pokemonActual!;
+    isFavorite.value = pokeApiCubit.favoritePokemon.contains(pokemon);
+    print('isFavorite: ${isFavorite.value}');
+    print('favoritePokemonList: ${pokeApiCubit.favoritePokemon}');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,15 +70,21 @@ class DetailScreen extends StatelessWidget {
             },
           ),
           actions: <Widget>[
-            Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.star_border,
-                      color: Colors.white, size: 30),
-                  onPressed: () {},
-                ),
-              ],
+            ValueListenableBuilder<bool>(
+              valueListenable: isFavorite,
+              builder: (context, value, child) {
+                return IconButton(
+                  icon: Icon(
+                    value ? Icons.star : Icons.star_border,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    pokeApiCubit.toggleFavorite(pokemon);
+                    isFavorite.value = !isFavorite.value;
+                  },
+                );
+              },
             ),
           ],
         ),
