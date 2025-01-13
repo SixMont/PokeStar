@@ -16,7 +16,7 @@ class FavoriteScreenContent extends StatelessWidget {
     return BlocBuilder<PokeApiCubit, PokeApiState>(
       builder: (context, state) {
         if (state is PokeApiInitial) {
-          pokeApiCubit.fetchPokemonList();
+          pokeApiCubit.filteredFavoritePokemonList;
           return const Center(child: CircularProgressIndicator());
         } else if (state is PokeApiLoading) {
           return const Center(child: CircularProgressIndicator());

@@ -13,16 +13,13 @@ class PokeApiCubit extends Cubit<PokeApiState> {
   String _searchQuery = ''; // Requête de recherche pour filtrer les Pokémon.
   List<Pokemon> _allPokemon = []; // Liste complète de Pokémon.
   List<Pokemon> _favoritePokemon = []; // Liste des Pokémon favoris.
-  List<Pokemon> favoritePokemonList = [];
   String? selectedFavorite;
   Pokemon? _pokemonActual; // Pokémon actuel sélectionné.
   Color? corPokemon; // Couleur du Pokémon actuel.
   int? positionActual; // Position actuelle du Pokémon.
   String _selectedFilter = 'None'; // Filtre sélectionné pour trier les favoris.
 
-  PokeApiCubit(this._repository) : super(PokeApiInitial()) {
-    _loadFavorites();
-  }
+  PokeApiCubit(this._repository) : super(PokeApiInitial());
 
   /// Renvoie le Pokémon actuel.
   Pokemon? get pokemonActual => _pokemonActual;
@@ -39,6 +36,7 @@ class PokeApiCubit extends Cubit<PokeApiState> {
     try {
       final pokeAPI = await _repository.fetchPokemonList();
       _allPokemon = pokeAPI.pokemon; // Stocke la liste complète des Pokémon.
+      await _loadFavorites(); // Charge les Pokémon favoris.
       emit(PokeApiLoaded(pokeAPI: pokeAPI, filteredPokemonList: _allPokemon));
     } catch (e) {
       emit(PokeApiError(message: e.toString()));
@@ -69,15 +67,16 @@ class PokeApiCubit extends Cubit<PokeApiState> {
   }
 
   /// Ajoute ou retire un Pokémon des favoris.
-  void toggleFavorite(Pokemon pokemon) {
+  void toggleFavorite(Pokemon pokemon) async {
     if (_favoritePokemon.contains(pokemon)) {
       _favoritePokemon.remove(pokemon);
     } else {
       _favoritePokemon.add(pokemon);
     }
+    await _saveFavorites();
     emit(PokeApiLoaded(
       pokeAPI: PokeAPI(pokemon: _allPokemon),
-      filteredPokemonList: filteredFavoritePokemonList,
+      filteredPokemonList: _allPokemon,
     ));
   }
 
@@ -161,10 +160,6 @@ class PokeApiCubit extends Cubit<PokeApiState> {
     final prefs = await SharedPreferences.getInstance();
     final favoriteNames = prefs.getStringList('favoritePokemons') ?? [];
     _favoritePokemon = _allPokemon.where((pokemon) => favoriteNames.contains(pokemon.name)).toList();
-    emit(PokeApiLoaded(
-      pokeAPI: PokeAPI(pokemon: _allPokemon),
-      filteredPokemonList: filteredPokemonList,
-    ));
   }
 
   /// Retourne le filtre sélectionné.
