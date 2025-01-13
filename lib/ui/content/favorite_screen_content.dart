@@ -16,12 +16,12 @@ class FavoriteScreenContent extends StatelessWidget {
     return BlocBuilder<PokeApiCubit, PokeApiState>(
       builder: (context, state) {
         if (state is PokeApiInitial) {
-          pokeApiCubit.fetchPokemonList();
+          pokeApiCubit.filteredFavoritePokemonList;
           return const Center(child: CircularProgressIndicator());
         } else if (state is PokeApiLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is PokeApiLoaded) {
-          final favoriteList = pokeApiCubit.favoritePokemonList;
+          final favoriteList = pokeApiCubit.favoritePokemon;
 
           if (favoriteList.isEmpty) {
             return const Center(
@@ -32,82 +32,38 @@ class FavoriteScreenContent extends StatelessWidget {
             );
           }
 
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DropdownButton<String>(
-                  value: pokeApiCubit.selectedFavorite,
-                  onChanged: (String? newValue) {
-                    pokeApiCubit.setSelectedFavorite(newValue);
-                  },
-                  items: favoriteList
-                      .map<DropdownMenuItem<String>>(
-                        (Pokemon pokemon) => DropdownMenuItem<String>(
-                      value: pokemon.name,
-                      child: Text(pokemon.name),
-                    ),
-                  )
-                      .toList(),
-                ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: favoriteList.length,
-                  itemBuilder: (context, index) {
-                    final pokemon = favoriteList[index];
-                    return GestureDetector(
-                      onTap: () {
-                        pokeApiCubit.setPokemonActual(index: index);
-                        Navigator.pushNamed(context, '/detail');
-                      },
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        elevation: 4,
-                        margin: const EdgeInsets.symmetric(
-                          vertical: 8.0,
-                          horizontal: 16.0,
-                        ),
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: ConstsApp.getColorType(
-                              type: pokemon.type[0],
-                            ),
-                            backgroundImage: NetworkImage(
-                              pokeApiCubit.getImage(
-                                numero: pokemon.num,
-                              ) as String,
-                            ),
-                          ),
-                          title: Text(
-                            pokemon.name,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          subtitle: Text(
-                            'ID: ${pokemon.num}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.star, color: Colors.red),
-                            onPressed: () {
-                              pokeApiCubit.toggleFavorite(pokemon);
-                            },
-                          ),
-                        ),
+          return GridView.builder(
+            padding: const EdgeInsets.all(8),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+              childAspectRatio: 3 / 4,
+            ),
+            itemCount: favoriteList.length,
+            itemBuilder: (context, index) {
+              final pokemon = favoriteList[index];
+              return GestureDetector(
+                onTap: () {
+                  pokeApiCubit.setPokemonActual(index: index);
+                  Navigator.pushNamed(context, '/detail');
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: ConstsApp.getColorType(type: pokemon.type[0]),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color.fromARGB(500, 0, 0, 0),
+                        blurRadius: 8,
+                        offset: Offset(0, 4),
                       ),
-                    );
-                  },
+                    ],
+                  ),
+                  child: _buildPokemonCard(pokemon, pokeApiCubit),
                 ),
-              ),
-            ],
+              );
+            },
           );
         } else if (state is PokeApiError) {
           return Center(
@@ -124,6 +80,95 @@ class FavoriteScreenContent extends StatelessWidget {
           return const Center(child: Text('Unknown state'));
         }
       },
+    );
+  }
+
+  Widget _buildPokemonCard(Pokemon pokemon, PokeApiCubit pokeApiCubit) {
+    return Stack(
+      children: [
+        Positioned(
+          top: 8,
+          right: 8,
+          child: Text(
+            pokemon.num,
+            style: const TextStyle(
+              fontSize: 14,
+              letterSpacing: 2.0,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Opacity(
+                    opacity: 0.2,
+                    child: Image.asset(
+                      ConstsApp.whitePokeball,
+                      width: 100,
+                      height: 100,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: pokeApiCubit.getImage(numero: pokemon.num),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              pokemon.name,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 18,
+                letterSpacing: 2.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: pokemon.type.map((type) {
+                return Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                  padding: const EdgeInsets.all(6.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: const Color.fromARGB(80, 255, 255, 255),
+                  ),
+                  child: Text(
+                    type.trim(),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

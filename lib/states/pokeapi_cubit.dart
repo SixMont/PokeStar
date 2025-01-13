@@ -50,12 +50,16 @@ class PokeApiCubit extends Cubit<PokeApiState> {
   /// Renvoie le nombre total de Pokémon.
   int get totalPokemon => _allPokemon.length;
 
+  /// Renvoie la liste des Pokémon favoris.
+  List<Pokemon> get favoritePokemon => _favoritePokemon;
+
   /// Récupère la liste des Pokémon depuis le dépôt.
   Future<void> fetchPokemonList() async {
     emit(PokeApiLoading());
     try {
       final pokeAPI = await _repository.fetchPokemonList();
-      _allPokemon = pokeAPI.pokemon; // Store the complete list of Pokémon.
+      _allPokemon = pokeAPI.pokemon; // Stocke la liste complète des Pokémon.
+      await _loadFavorites(); // Charge les Pokémon favoris.
       emit(PokeApiLoaded(pokeAPI: pokeAPI, filteredPokemonList: _allPokemon));
     } catch (e) {
       emit(PokeApiError(message: e.toString()));
@@ -91,9 +95,10 @@ class PokeApiCubit extends Cubit<PokeApiState> {
     } else {
       _favoritePokemon.add(pokemon);
     }
+    await _saveFavorites();
     emit(PokeApiLoaded(
       pokeAPI: PokeAPI(pokemon: _allPokemon),
-      filteredPokemonList: filteredFavoritePokemonList,
+      filteredPokemonList: _allPokemon,
     ));
   }
 
@@ -180,5 +185,18 @@ class PokeApiCubit extends Cubit<PokeApiState> {
   }
 
   // Return the selected filter.
+  Future<void> _saveFavorites() async {
+    final prefs = await SharedPreferences.getInstance();
+    final favoriteNames = _favoritePokemon.map((pokemon) => pokemon.name).toList();
+    await prefs.setStringList('favoritePokemons', favoriteNames);
+  }
+
+  Future<void> _loadFavorites() async {
+    final prefs = await SharedPreferences.getInstance();
+    final favoriteNames = prefs.getStringList('favoritePokemons') ?? [];
+    _favoritePokemon = _allPokemon.where((pokemon) => favoriteNames.contains(pokemon.name)).toList();
+  }
+
+  /// Retourne le filtre sélectionné.
   String get selectedFilter => _selectedFilter;
 }
