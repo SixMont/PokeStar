@@ -50,7 +50,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mobx_codegen:
-  shared_preferences: ^2.0.9
   build_runner: ^2.0.0
   json_serializable: ^6.0.0
   # The "flutter_lints" package below contains a set of recommended lints to

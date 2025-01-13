@@ -13,8 +13,7 @@ class PokeApiCubit extends Cubit<PokeApiState> {
 
   String _searchQuery = ''; // Search query to filter Pokémon.
   List<Pokemon> _allPokemon = []; // Complete list of Pokémon.
-  final List<Pokemon> _favoritePokemon = []; // List of favorite Pokémon.
-  List<Pokemon> favoritePokemonList = []; // List to store favorite Pokémon.
+  List<Pokemon> _favoritePokemon = []; // List of favorite Pokémon.
   String? selectedFavorite; // Currently selected favorite Pokémon.
   Pokemon? _pokemonActual; // Currently selected Pokémon.
   Color? corPokemon; // Color of the current Pokémon.
@@ -43,23 +42,23 @@ class PokeApiCubit extends Cubit<PokeApiState> {
         useAlternateUrl ? 'Image Pokemon GO' : 'Original Image');
   }
 
-  // Fetch the list of Pokémon from the repository.
-  /// Renvoie le Pokémon actuel.
+
+  /// Return the position of the current Pokémon.
   Pokemon? get pokemonActual => _pokemonActual;
 
-  /// Renvoie le nombre total de Pokémon.
+  /// Return the total number of Pokémon.
   int get totalPokemon => _allPokemon.length;
 
-  /// Renvoie la liste des Pokémon favoris.
+  /// Return the list of favorite Pokémon.
   List<Pokemon> get favoritePokemon => _favoritePokemon;
 
-  /// Récupère la liste des Pokémon depuis le dépôt.
+  // Fetch the list of Pokémon from the repository.
   Future<void> fetchPokemonList() async {
     emit(PokeApiLoading());
     try {
       final pokeAPI = await _repository.fetchPokemonList();
-      _allPokemon = pokeAPI.pokemon; // Stocke la liste complète des Pokémon.
-      await _loadFavorites(); // Charge les Pokémon favoris.
+      _allPokemon = pokeAPI.pokemon;
+      await _loadFavorites();
       emit(PokeApiLoaded(pokeAPI: pokeAPI, filteredPokemonList: _allPokemon));
     } catch (e) {
       emit(PokeApiError(message: e.toString()));
@@ -89,7 +88,7 @@ class PokeApiCubit extends Cubit<PokeApiState> {
   }
 
   // Add or remove a Pokémon from favorites.
-  void toggleFavorite(Pokemon pokemon) {
+  void toggleFavorite(Pokemon pokemon) async {
     if (_favoritePokemon.contains(pokemon)) {
       _favoritePokemon.remove(pokemon);
     } else {
@@ -125,15 +124,6 @@ class PokeApiCubit extends Cubit<PokeApiState> {
       filteredList.sort((a, b) => a.num.compareTo(b.num));
     }
     return filteredList;
-  }
-
-  // Set the selected filter and emit a new filtered state.
-  void setFilter(String value) {
-    _selectedFilter = value;
-    emit(PokeApiLoaded(
-      pokeAPI: PokeAPI(pokemon: _allPokemon),
-      filteredPokemonList: filteredFavoritePokemonList,
-    ));
   }
 
   // Toggle the image URL between the original and alternate.
@@ -184,19 +174,20 @@ class PokeApiCubit extends Cubit<PokeApiState> {
     ));
   }
 
-  // Return the selected filter.
+  // Save the list of favorite Pokémon to shared preferences.
   Future<void> _saveFavorites() async {
     final prefs = await SharedPreferences.getInstance();
     final favoriteNames = _favoritePokemon.map((pokemon) => pokemon.name).toList();
     await prefs.setStringList('favoritePokemons', favoriteNames);
   }
 
+  // Load the list of favorite Pokémon from shared preferences.
   Future<void> _loadFavorites() async {
     final prefs = await SharedPreferences.getInstance();
     final favoriteNames = prefs.getStringList('favoritePokemons') ?? [];
     _favoritePokemon = _allPokemon.where((pokemon) => favoriteNames.contains(pokemon.name)).toList();
   }
 
-  /// Retourne le filtre sélectionné.
+  // Return the selected filter.
   String get selectedFilter => _selectedFilter;
 }
