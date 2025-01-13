@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:poke_star/music/music_player.dart';
 import 'package:poke_star/states/pokeapi_cubit.dart';
-import 'package:shared_preferences/shared_preferences.dart';  // build don't work so I import the package
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -50,34 +50,46 @@ class _MenuScreenState extends State<MenuScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey[200],
-        title: const Text('Menu', style: TextStyle(color: Colors.black)),
+        title: const Text('Menu', style: TextStyle(color: Colors.black, letterSpacing: 2.0)),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-            DropdownButton<String>(
-              value: _selectedImageType,
-              items: const [
-                DropdownMenuItem(
-                  value: 'Original Image',
-                  child: Text('Original Image'),
-                ),
-                DropdownMenuItem(
-                  value: 'Image Pokemon GO',
-                  child: Text('Image Pokemon GO'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Image preference:', style: TextStyle(letterSpacing: 2.0, fontSize: 14)),
+                SizedBox( // Set the desired width here
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: _selectedImageType,
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'Original Image',
+                          child: Text('Original Image', style: TextStyle(letterSpacing: 2.0, fontSize: 13)),
+                        ),
+                        DropdownMenuItem(
+                          value: 'Image Pokemon GO',
+                          child: Text('Image Pokemon GO', style: TextStyle(letterSpacing: 2.0, fontSize: 13)),
+                        ),
+                      ],
+                      onChanged: (String? newValue) {
+                        if (newValue != null && newValue != _selectedImageType) {
+                          setState(() {
+                            _selectedImageType = newValue;
+                          });
+                          context.read<PokeApiCubit>().toggleImageUrl();
+                          _savePreferences();
+                        }
+                      },
+                    ),
+                  ),
                 ),
               ],
-              onChanged: (String? newValue) {
-                if (newValue != null && newValue != _selectedImageType) {
-                  setState(() {
-                    _selectedImageType = newValue;
-                  });
-                  context.read<PokeApiCubit>().toggleImageUrl();
-                  _savePreferences();
-                }
-              },
             ),
             const SizedBox(height: 10),
             const Divider(
@@ -88,37 +100,9 @@ class _MenuScreenState extends State<MenuScreen> {
               endIndent: 20,
             ),
             const SizedBox(height: 10),
-            Text('Volume: ${(_currentVolume * 100).toInt()}%'),
-            Slider(
-              value: _currentVolume,
-              min: 0.0,
-              max: 1.0,
-              divisions: 100,
-              label: (_currentVolume * 100).toInt().toString(),
-              onChanged: (double value) {
-                setState(() {
-                  _currentVolume = value;
-                });
-                MusicPlayer.setVolume(value);
-                _savePreferences();
-              },
-              activeColor: Colors.grey,
-              inactiveColor: Colors.grey[300],
-              thumbColor: Colors.grey,
-            ),
-            const SizedBox(height: 10),
-            const Divider(
-              height: 1.5,
-              thickness: 0.5,
-              color: Colors.grey,
-              indent: 20,
-              endIndent: 20,
-            ),
-            const SizedBox(height: 10),
+            Text('Volume: ${(_currentVolume * 100).toInt()}%', style: const TextStyle(letterSpacing: 2.0, fontSize: 14)),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Music: '),
                 IconButton(
                   icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
                   onPressed: () {
@@ -132,6 +116,25 @@ class _MenuScreenState extends State<MenuScreen> {
                     });
                     _savePreferences();
                   },
+                ),
+                Expanded(
+                  child: Slider(
+                    value: _currentVolume,
+                    min: 0.0,
+                    max: 1.0,
+                    divisions: 100,
+                    label: (_currentVolume * 100).toInt().toString(),
+                    onChanged: (double value) {
+                      setState(() {
+                        _currentVolume = value;
+                      });
+                      MusicPlayer.setVolume(value);
+                      _savePreferences();
+                    },
+                    activeColor: Colors.grey,
+                    inactiveColor: Colors.grey[300],
+                    thumbColor: Colors.grey,
+                  ),
                 ),
               ],
             ),

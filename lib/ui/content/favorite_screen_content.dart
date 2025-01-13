@@ -27,7 +27,7 @@ class FavoriteScreenContent extends StatelessWidget {
             return const Center(
               child: Text(
                 'No favorite Pokémon found!',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: 2.0),
               ),
             );
           }
@@ -73,11 +73,12 @@ class FavoriteScreenContent extends StatelessWidget {
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.red,
+                letterSpacing: 2.0,
               ),
             ),
           );
         } else {
-          return const Center(child: Text('Unknown state'));
+          return const Center(child: Text('Unknown state', style: TextStyle(letterSpacing: 2.0)));
         }
       },
     );
