@@ -18,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: _currentIndex == 0 ? Colors.red : Colors.yellow, // Change AppBar color based on the selected page.
+        backgroundColor: _currentIndex == 0 ? Colors.red : Colors.amber, // Change AppBar color based on the selected page.
         title: Stack(
           children: [
             Row(
@@ -53,6 +53,7 @@ class _MainScreenState extends State<MainScreen> {
                         style: TextStyle(
                           fontFamily: 'Google',
                           fontSize: 20,
+                          letterSpacing: 2.0,
                           fontWeight: FontWeight.bold,
                           color: _currentIndex == 0 ? Colors.red : Colors.white,
                         ),
@@ -90,10 +91,11 @@ class _MainScreenState extends State<MainScreen> {
                         style: TextStyle(
                           fontFamily: 'Google',
                           fontSize: 20,
+                          letterSpacing: 2.0,
                           fontWeight: FontWeight.bold,
-                          color: _currentIndex == 1 ? Colors.yellow : Colors.white,
+                          color: _currentIndex == 1 ? Colors.amber : Colors.white,
                         ),
-                        child: const Text('Pokestar'),
+                        child: const Text('PokeStar'),
                       ),
                     ],
                   ),
