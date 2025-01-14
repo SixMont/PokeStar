@@ -149,79 +149,61 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
               ),
             ),
-            Positioned(
-              top: MediaQuery.of(context).size.height / 3 - 180,
-              left: MediaQuery.of(context).size.width / 2 - 100,
+            GestureDetector(
+              onHorizontalDragEnd: (details) {
+                if (details.velocity.pixelsPerSecond.dx < 0 &&
+                    currentIndex < totalPokemon - 1) {
+                  // Swipe vers la gauche (afficher le Pokémon suivant)
+                  navigateToPokemon(currentIndex + 1);
+                } else if (details.velocity.pixelsPerSecond.dx > 0 &&
+                    currentIndex > 0) {
+                  // Swipe vers la droite (afficher le Pokémon précédent)
+                  navigateToPokemon(currentIndex - 1);
+                }
+              },
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Image.asset(
-                    ConstsApp.whitePokeball,
-                    height: 200,
-                    color: Colors.white.withAlpha((0.2 * 255).toInt()),
-                  ),
-                  Hero(
-                    tag: pokemon.num,
-                    child: SizedBox(
-                      height: 200,
-                      child: Consumer<PokeApiCubit>(
-                        builder: (context, pokeApiCubit, child) {
-                          return pokeApiCubit.getImage(numero: pokemon.num);
-                        },
-                      ),
+                  Positioned(
+                    top: MediaQuery.of(context).size.height / 3 - 180,
+                    left: MediaQuery.of(context).size.width / 2 - 100,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Image.asset(
+                          ConstsApp.whitePokeball,
+                          height: 200,
+                          color: Colors.white.withAlpha((0.2 * 255).toInt()),
+                        ),
+                        Hero(
+                          tag: pokemon.num,
+                          child: SizedBox(
+                            height: 200,
+                            child: Consumer<PokeApiCubit>(
+                              builder: (context, pokeApiCubit, child) {
+                                return pokeApiCubit.getImage(numero: pokemon.num);
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  if (currentIndex > 0)
+                    Positioned(
+                      top: MediaQuery.of(context).size.height / 3 - 130,
+                      left: 16,
+                      child: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+                    ),
+                  if (currentIndex < totalPokemon - 1)
+                    Positioned(
+                      top: MediaQuery.of(context).size.height / 3 - 130,
+                      right: 16,
+                      child: Icon(Icons.arrow_forward_ios, color: Colors.white),
+                    ),
                 ],
               ),
             ),
-            if (currentIndex > 0)
-              Positioned(
-                top: MediaQuery.of(context).size.height / 3 - 130,
-                left: 16,
-                child: Container(
-                  height: 45,
-                  width: 45,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withAlpha((0.2 * 255).toInt()),
-                    borderRadius: BorderRadius.circular(45),
-                  ),
-                  child: Center(
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_back_ios_new,
-                          color: Colors.white, size: 22),
-                      onPressed: () {
-                        if (currentIndex > 0) {
-                          navigateToPokemon(currentIndex - 1);
-                        }
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            if (currentIndex < totalPokemon - 1)
-              Positioned(
-                top: MediaQuery.of(context).size.height / 3 - 130,
-                right: 16,
-                child: Container(
-                  height: 45,
-                  width: 45,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withAlpha((0.2 * 255).toInt()),
-                    borderRadius: BorderRadius.circular(45),
-                  ),
-                  child: Center(
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_forward_ios,
-                          color: Colors.white, size: 22),
-                      onPressed: () {
-                        if (currentIndex < totalPokemon - 1) {
-                          navigateToPokemon(currentIndex + 1);
-                        }
-                      },
-                    ),
-                  ),
-                ),
-              ),
             Positioned(
               top: kToolbarHeight - 30,
               left: 16,
