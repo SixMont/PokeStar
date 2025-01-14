@@ -157,11 +157,9 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
               onHorizontalDragEnd: (details) {
                 if (details.velocity.pixelsPerSecond.dx < 0 &&
                     currentIndex < totalPokemon - 1) {
-                  // Swipe vers la gauche (afficher le Pokémon suivant)
                   navigateToPokemon(currentIndex + 1);
                 } else if (details.velocity.pixelsPerSecond.dx > 0 &&
                     currentIndex > 0) {
-                  // Swipe vers la droite (afficher le Pokémon précédent)
                   navigateToPokemon(currentIndex - 1);
                 }
               },
