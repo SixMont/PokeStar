@@ -16,8 +16,10 @@ class DetailScreen extends StatefulWidget {
   _DetailScreenState createState() => _DetailScreenState();
 }
 
-class _DetailScreenState extends State<DetailScreen> {
+class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderStateMixin {
   late ValueNotifier<bool> isFavorite;
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
@@ -25,16 +27,18 @@ class _DetailScreenState extends State<DetailScreen> {
     final pokeApiCubit = context.read<PokeApiCubit>();
     final pokemon = pokeApiCubit.pokemonActual!;
     isFavorite = ValueNotifier(pokeApiCubit.favoritePokemon.contains(pokemon));
+
+    _controller = AnimationController(
+      duration: const Duration(seconds: 10),
+      vsync: this,
+    )..repeat();
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.linear);
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final pokeApiCubit = context.read<PokeApiCubit>();
-    final pokemon = pokeApiCubit.pokemonActual!;
-    isFavorite.value = pokeApiCubit.favoritePokemon.contains(pokemon);
-    print('isFavorite: ${isFavorite.value}');
-    print('favoritePokemonList: ${pokeApiCubit.favoritePokemon}');
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -170,10 +174,13 @@ class _DetailScreenState extends State<DetailScreen> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        Image.asset(
-                          ConstsApp.whitePokeball,
-                          height: 200,
-                          color: Colors.white.withAlpha((0.2 * 255).toInt()),
+                        RotationTransition(
+                          turns: _animation,
+                          child: Image.asset(
+                            ConstsApp.whitePokeball,
+                            height: 200,
+                            color: Colors.white.withAlpha((0.2 * 255).toInt()),
+                          ),
                         ),
                         Hero(
                           tag: pokemon.num,
