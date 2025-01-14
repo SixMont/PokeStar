@@ -58,10 +58,10 @@
 ## Application Screenshots
 
 ### Home Page
-![Home Page Screenshot](assets\screenshots\Screenshot_20250114_223237.png "Home Page")
+![Home Page Screenshot](assets/screenshots/Screenshot_20250114_223237.png "Home Page")
 
 ### Pokémon Details
-![Pokémon Details Screenshot](assets\screenshots\Screenshot_20250114_223618.png "Pokémon Details")
+![Pokémon Details Screenshot](assets/screenshots/Screenshot_20250114_223618.png "Pokémon Details")
 
 ### Favorites Page
-![Favorites Page Screenshot](assets\screenshots\Screenshot_20250114_223444.png "Favorites Page")
+![Favorites Page Screenshot](assets/screenshots/Screenshot_20250114_223444.png "Favorites Page")
