@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:poke_star/consts/consts_app.dart';
 import 'package:poke_star/ui/screens/components/evolution_tab.dart';
 import 'package:poke_star/ui/screens/components/status_tab.dart';
@@ -30,7 +29,6 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
   void initState() {
     super.initState();
     final pokeApiCubit = context.read<PokeApiCubit>();
-    final pokeApiCubitV2 = context.read<PokeApiV2Cubit>();
     currentIndex = widget.initialIndex;
 
     isFavorite = ValueNotifier(pokeApiCubit.favoritePokemon.contains(widget.pokemonList[currentIndex]));
@@ -59,6 +57,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
         currentIndex = newIndex;
         isFavorite.value = pokeApiCubit.favoritePokemon.contains(widget.pokemonList[currentIndex]);
       });
+      context.read<PokeApiCubit>().setPokemonActual(index: newIndex);
       context.read<PokeApiV2Cubit>().getInfoSpecie(widget.pokemonList[currentIndex].name);
     }
 
@@ -127,7 +126,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                             labelColor: Colors.black,
                             unselectedLabelColor: Colors.grey,
                             indicatorColor: Colors.black,
-                            labelStyle: const TextStyle(
+                            labelStyle: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 2.5,
@@ -200,13 +199,13 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                     Positioned(
                       top: MediaQuery.of(context).size.height / 3 - 130,
                       left: 16,
-                      child: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+                      child: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
                     ),
                   if (currentIndex < widget.pokemonList.length - 1)
                     Positioned(
                       top: MediaQuery.of(context).size.height / 3 - 130,
                       right: 16,
-                      child: Icon(Icons.arrow_forward_ios, color: Colors.white),
+                      child: const Icon(Icons.arrow_forward_ios, color: Colors.white),
                     ),
                 ],
               ),

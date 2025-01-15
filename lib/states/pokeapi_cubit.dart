@@ -18,7 +18,7 @@ class PokeApiCubit extends Cubit<PokeApiState> {
   Pokemon? _pokemonActual; // Currently selected Pokémon.
   Color? corPokemon; // Color of the current Pokémon.
   int? positionActual; // Current position of the Pokémon.
-  String _selectedFilter = 'None'; // Selected filter to sort favorites.
+  final String _selectedFilter = 'None'; // Selected filter to sort favorites.
 
   PokeApiCubit(this._repository) : super(PokeApiInitial()) {
     _loadPreferences();

@@ -51,8 +51,8 @@ class PokeApiLoaded extends PokeApiState {
     return PokeApiLoaded(
       pokeAPI: pokeAPI,
       filteredPokemonList: filteredPokemonList ?? this.filteredPokemonList,
-      pokemonActual: pokemonAtual ?? this.pokemonActual,
-      positionActual: posicaoAtual ?? this.positionActual,
+      pokemonActual: pokemonAtual ?? pokemonActual,
+      positionActual: posicaoAtual ?? positionActual,
       corPokemon: corPokemon ?? this.corPokemon,
       searchQuery: searchQuery ?? this.searchQuery,
     );

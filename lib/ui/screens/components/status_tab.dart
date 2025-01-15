@@ -13,7 +13,7 @@ class StatusTab extends StatelessWidget {
   List<int> getStatusPokemon(PokeApiV2 pokeApiV2) {
     List<int> list = [1, 2, 3, 4, 5, 6, 7];
     int sum = 0;
-    pokeApiV2.stats.forEach((f) {
+    for (var f in pokeApiV2.stats) {
       sum += f.baseStat;
       switch (f.stat.name) {
         case 'speed':
@@ -35,7 +35,7 @@ class StatusTab extends StatelessWidget {
           list[5] = f.baseStat;
           break;
       }
-    });
+    }
     list[6] = sum;
     return list;
   }
@@ -136,7 +136,7 @@ class StatusTab extends StatelessWidget {
 class StatusBar extends StatelessWidget {
   final double widthFactor;
 
-  const StatusBar({Key? key, required this.widthFactor}) : super(key: key);
+  const StatusBar({super.key, required this.widthFactor});
 
   @override
   Widget build(BuildContext context) {
