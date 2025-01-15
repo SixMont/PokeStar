@@ -14,10 +14,10 @@ class EvolutionTab extends StatelessWidget {
   }
 
   List<Widget> getEvolution(Pokemon? pokemon, PokeApiCubit pokeApiCubit) {
-    List<Widget> _list = [];
+    List<Widget> list = [];
     if (pokemon!.prevEvolution.isNotEmpty) {
-      pokemon.prevEvolution.forEach((f) {
-        _list.add(
+      for (var f in pokemon.prevEvolution) {
+        list.add(
           Column(
             children: [
               resizePokemon(pokeApiCubit.getImage(numero: f.num)),
@@ -35,10 +35,10 @@ class EvolutionTab extends StatelessWidget {
             ],
           ),
         );
-        _list.add(const Icon(Icons.arrow_forward, size: 24));
-      });
+        list.add(const Icon(Icons.arrow_forward, size: 24));
+      }
     }
-    _list.add(
+    list.add(
       Column(
         children: [
           resizePokemon(pokeApiCubit.getImage(numero: pokemon.num)),
@@ -58,9 +58,9 @@ class EvolutionTab extends StatelessWidget {
     );
 
     if (pokemon.nextEvolution.isNotEmpty) {
-      _list.add(const Icon(Icons.arrow_forward, size: 24));
-      pokemon.nextEvolution.forEach((f) {
-        _list.add(
+      list.add(const Icon(Icons.arrow_forward, size: 24));
+      for (var f in pokemon.nextEvolution) {
+        list.add(
           Column(
             children: [
               resizePokemon(pokeApiCubit.getImage(numero: f.num)),
@@ -79,12 +79,12 @@ class EvolutionTab extends StatelessWidget {
           ),
         );
         if (pokemon.nextEvolution.last.name != f.name) {
-          _list.add(const Icon(Icons.arrow_forward, size: 24));
+          list.add(const Icon(Icons.arrow_forward, size: 24));
         }
-      });
+      }
     }
 
-    return _list;
+    return list;
   }
 
   @override
