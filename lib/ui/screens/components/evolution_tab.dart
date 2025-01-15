@@ -5,7 +5,9 @@ import 'package:poke_star/states/pokeapi_state.dart';
 import 'package:poke_star/models/pokeapi.dart';
 
 class EvolutionTab extends StatelessWidget {
-  const EvolutionTab({Key? key}) : super(key: key);
+  final Pokemon pokemon;
+
+  const EvolutionTab({super.key, required this.pokemon});
 
   Widget resizePokemon(Widget widget) {
     return SizedBox(height: 80, width: 80, child: widget);

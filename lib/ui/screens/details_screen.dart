@@ -5,12 +5,16 @@ import 'package:poke_star/ui/screens/components/evolution_tab.dart';
 import 'package:poke_star/ui/screens/components/status_tab.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/pokeapi.dart';
 import '../../states/pokeapi_cubit.dart';
 import '../../states/pokeapiv2_cubit.dart';
 import 'components/about_tab.dart';
 
 class DetailScreen extends StatefulWidget {
-  const DetailScreen({super.key});
+  final List<Pokemon> pokemonList;
+  final int initialIndex;
+
+  const DetailScreen({super.key, required this.pokemonList, required this.initialIndex});
 
   @override
   _DetailScreenState createState() => _DetailScreenState();
@@ -20,13 +24,16 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
   late ValueNotifier<bool> isFavorite;
   late AnimationController _controller;
   late Animation<double> _animation;
+  late int currentIndex;
 
   @override
   void initState() {
     super.initState();
     final pokeApiCubit = context.read<PokeApiCubit>();
-    final pokemon = pokeApiCubit.pokemonActual!;
-    isFavorite = ValueNotifier(pokeApiCubit.favoritePokemon.contains(pokemon));
+    final pokeApiCubitV2 = context.read<PokeApiV2Cubit>();
+    currentIndex = widget.initialIndex;
+
+    isFavorite = ValueNotifier(pokeApiCubit.favoritePokemon.contains(widget.pokemonList[currentIndex]));
 
     _controller = AnimationController(
       duration: const Duration(seconds: 10),
@@ -44,20 +51,15 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     final pokeApiCubit = context.read<PokeApiCubit>();
-    final pokeApiCubitV2 = context.read<PokeApiV2Cubit>();
-    final pokemon = pokeApiCubit.pokemonActual!;
+    final pokemon = widget.pokemonList[currentIndex];
     Color? corPokemon = ConstsApp.getColorType(type: pokemon.type[0]);
-    int currentIndex = pokeApiCubit.positionActual!;
-    int totalPokemon = pokeApiCubit.totalPokemon;
 
-    void navigateToPokemon(int index) {
-      pokeApiCubit.setPokemonActual(index: index);
-      final newPokemon = pokeApiCubit.pokemonActual!;
-      pokeApiCubitV2.getInfoSpecie(newPokemon.name);
-      Navigator.pushReplacementNamed(
-        context,
-        '/detail',
-      );
+    void navigateToPokemon(int newIndex) {
+      setState(() {
+        currentIndex = newIndex;
+        isFavorite.value = pokeApiCubit.favoritePokemon.contains(widget.pokemonList[currentIndex]);
+      });
+      context.read<PokeApiV2Cubit>().getInfoSpecie(widget.pokemonList[currentIndex].name);
     }
 
     return DefaultTabController(
@@ -115,13 +117,13 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                     topRight: Radius.circular(60),
                   ),
                 ),
-                child: const Column(
+                child: Column(
                   children: <Widget>[
-                    SizedBox(height: 100, width: double.infinity),
+                    const SizedBox(height: 100, width: double.infinity),
                     Expanded(
                       child: Column(
                         children: [
-                          TabBar(
+                          const TabBar(
                             labelColor: Colors.black,
                             unselectedLabelColor: Colors.grey,
                             indicatorColor: Colors.black,
@@ -140,9 +142,9 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                           Expanded(
                             child: TabBarView(
                               children: [
-                                AboutTab(),
-                                EvolutionTab(),
-                                StatusTab()
+                                AboutTab(pokemon: widget.pokemonList[currentIndex]),
+                                EvolutionTab(pokemon: widget.pokemonList[currentIndex]),
+                                StatusTab(pokemon: widget.pokemonList[currentIndex]),
                               ],
                             ),
                           ),
@@ -156,7 +158,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
             GestureDetector(
               onHorizontalDragEnd: (details) {
                 if (details.velocity.pixelsPerSecond.dx < 0 &&
-                    currentIndex < totalPokemon - 1) {
+                    currentIndex < widget.pokemonList.length - 1) {
                   navigateToPokemon(currentIndex + 1);
                 } else if (details.velocity.pixelsPerSecond.dx > 0 &&
                     currentIndex > 0) {
@@ -200,7 +202,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                       left: 16,
                       child: Icon(Icons.arrow_back_ios_new, color: Colors.white),
                     ),
-                  if (currentIndex < totalPokemon - 1)
+                  if (currentIndex < widget.pokemonList.length - 1)
                     Positioned(
                       top: MediaQuery.of(context).size.height / 3 - 130,
                       right: 16,

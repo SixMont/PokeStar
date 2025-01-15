@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../models/pokeapi.dart';
 import '../../../models/pokeapiv2.dart';
 import '../../../states/pokeapiv2_cubit.dart';
 import '../../../states/pokeapiv2_state.dart';
 
 class StatusTab extends StatelessWidget {
-  const StatusTab({Key? key}) : super(key: key);
+  final Pokemon pokemon;
+
+  const StatusTab({super.key, required this.pokemon});
 
   List<int> getStatusPokemon(PokeApiV2 pokeApiV2) {
     List<int> list = [1, 2, 3, 4, 5, 6, 7];

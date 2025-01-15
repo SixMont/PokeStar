@@ -59,10 +59,24 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'PokeStar',
-        routes: {
-          '/home': (context) => const MainScreen(),
-          '/detail': (context) => const DetailScreen(),
-          '/menu': (context) => const MenuScreen(),
+        onGenerateRoute: (settings) {
+          if (settings.name == '/detail') {
+            final args = settings.arguments as Map<String, dynamic>;
+            return MaterialPageRoute(
+              builder: (context) => DetailScreen(
+                pokemonList: args['pokemonList'],
+                initialIndex: args['initialIndex'],
+              ),
+            );
+          }
+          if (settings.name == '/menu') {
+            return MaterialPageRoute(
+              builder: (context) => const MenuScreen(),
+            );
+          }
+          return MaterialPageRoute(
+            builder: (context) => const MainScreen(),
+          );
         },
         initialRoute: '/home',
         theme: ThemeData(

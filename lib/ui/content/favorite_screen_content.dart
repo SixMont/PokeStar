@@ -27,7 +27,10 @@ class FavoriteScreenContent extends StatelessWidget {
             return const Center(
               child: Text(
                 'No favorite Pokémon found!',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: 2.0),
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2.0),
               ),
             );
           }
@@ -46,7 +49,14 @@ class FavoriteScreenContent extends StatelessWidget {
               return GestureDetector(
                 onTap: () {
                   pokeApiCubit.setPokemonActual(index: index);
-                  Navigator.pushNamed(context, '/detail');
+                  Navigator.pushNamed(
+                    context,
+                    '/detail',
+                    arguments: {
+                      'pokemonList': pokeApiCubit.favoritePokemon,
+                      'initialIndex': index
+                    },
+                  );
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -78,7 +88,9 @@ class FavoriteScreenContent extends StatelessWidget {
             ),
           );
         } else {
-          return const Center(child: Text('Unknown state', style: TextStyle(letterSpacing: 2.0)));
+          return const Center(
+              child:
+                  Text('Unknown state', style: TextStyle(letterSpacing: 2.0)));
         }
       },
     );

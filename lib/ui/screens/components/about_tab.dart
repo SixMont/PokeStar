@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:poke_star/states/pokeapiv2_cubit.dart';
 import 'package:poke_star/states/pokeapiv2_state.dart';
+import '../../../models/pokeapi.dart';
 import '../../../models/pokeapiv2.dart';
 import '../../../models/specie.dart';
 
 class AboutTab extends StatelessWidget {
-  const AboutTab({Key? key}) : super(key: key);
+  final Pokemon pokemon;
+
+  const AboutTab({super.key, required this.pokemon});
 
   @override
   Widget build(BuildContext context) {
