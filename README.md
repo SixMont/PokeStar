@@ -96,7 +96,7 @@ Select the project folder and click OK to open it.
     - Open a terminal and run the following command to get the dependencies: ```flutter pub get```
 
 
-  - **Run the Application:**
+4. **Run the Application:**
 
     - Connect an Android emulator or a physical device.
 Click on the Run button or use the terminal command:
