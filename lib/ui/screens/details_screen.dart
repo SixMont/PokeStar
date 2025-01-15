@@ -30,7 +30,6 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
   void initState() {
     super.initState();
     final pokeApiCubit = context.read<PokeApiCubit>();
-    final pokeApiCubitV2 = context.read<PokeApiV2Cubit>();
     currentIndex = widget.initialIndex;
 
     isFavorite = ValueNotifier(pokeApiCubit.favoritePokemon.contains(widget.pokemonList[currentIndex]));
@@ -59,6 +58,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
         currentIndex = newIndex;
         isFavorite.value = pokeApiCubit.favoritePokemon.contains(widget.pokemonList[currentIndex]);
       });
+      context.read<PokeApiCubit>().setPokemonActual(index: newIndex);
       context.read<PokeApiV2Cubit>().getInfoSpecie(widget.pokemonList[currentIndex].name);
     }
 

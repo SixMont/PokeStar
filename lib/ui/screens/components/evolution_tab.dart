@@ -89,14 +89,13 @@ class EvolutionTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pokeApiCubit = context.read<PokeApiCubit>();
     return BlocBuilder<PokeApiCubit, PokeApiState>(
       builder: (context, state) {
         if (state is PokeApiLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is PokeApiLoaded) {
           List<Widget> evolutionWidgets =
-          getEvolution(pokeApiCubit.pokemonActual, context.read<PokeApiCubit>());
+          getEvolution(pokemon, context.read<PokeApiCubit>());
 
           return LayoutBuilder(
             builder: (context, constraints) {
