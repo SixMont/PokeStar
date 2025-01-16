@@ -16,10 +16,10 @@ class DetailScreen extends StatefulWidget {
   const DetailScreen({super.key, required this.pokemonList, required this.initialIndex});
 
   @override
-  _DetailScreenState createState() => _DetailScreenState();
+  DetailScreenState createState() => DetailScreenState();
 }
 
-class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderStateMixin {
+class DetailScreenState extends State<DetailScreen> with SingleTickerProviderStateMixin {
   late ValueNotifier<bool> isFavorite;
   late AnimationController _controller;
   late Animation<double> _animation;

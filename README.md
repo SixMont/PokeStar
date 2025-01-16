@@ -59,6 +59,9 @@
 - **Music Control Button**:  
   A button to stop or restart the background music playback.
 
+### Music
+- **Background Music**:  
+  A background music track plays throughout the application.
 
 ---
 
@@ -95,7 +98,6 @@ Select the project folder and click OK to open it.
 3. **Install Dependencies**
     - Open a terminal and run the following command to get the dependencies: ```flutter pub get```
 
-
 4. **Run the Application:**
 
     - Connect an Android emulator or a physical device.
@@ -120,3 +122,5 @@ Click on the Run button or use the terminal command:
 ### Parameters Page
 ![Parameters Page Screenshot](assets/screenshots/Screenshot_20250114_223618.png "Parameters")
 
+### Credits
+- **Music**: https://www.youtube.com/watch?v=YhN4oAS3O4c&t=1s

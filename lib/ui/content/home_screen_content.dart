@@ -82,6 +82,7 @@ class HomeScreenContent extends StatelessWidget {
                       onTap: () async {
                         pokeApiCubit.setPokemonActual(index: index);
                         await pokeApiV2Cubit.getInfoSpecie(pokemon.name);
+                        if (!context.mounted) return;
                         Navigator.pushNamed(context, '/detail', arguments: {
                           'pokemonList': filteredList,
                           'initialIndex': index,

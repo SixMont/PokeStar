@@ -49,6 +49,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_test:
     sdk: flutter
+  bloc: ^8.0.0
   mobx_codegen:
   build_runner: ^2.0.0
   json_serializable: ^6.0.0

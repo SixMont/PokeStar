@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 
 class MusicPlayer {
   static final AudioPlayer _audioPlayer = AudioPlayer();
@@ -11,7 +12,9 @@ class MusicPlayer {
       await _audioPlayer.play(AssetSource(musicUrl));
       await _audioPlayer.setVolume(1);
     } catch (e) {
-      print('Erreur lors de la lecture de la musique: $e');
+      if (kDebugMode) {
+        print('Erreur lors de la lecture de la musique: $e');
+      }
     }
   }
   // Méthode pour changer le volume
