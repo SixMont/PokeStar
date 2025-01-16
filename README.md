@@ -112,9 +112,9 @@ Click on the Run button or use the terminal command:
 ![Home Page Screenshot](assets/screenshots/Screenshot_20250114_223237.png "Home Page")
 
 ### Details Page
-![Details Page Screenshot 1](assets/screenshots/Screenshot_20250115_154055.png "Details Page 1")
-![Details Page Screenshot 1](assets/screenshots/Screenshot_20250115_154108.png "Details Page 2")
-![Details Page Screenshot 1](assets/screenshots/Screenshot_20250115_154117.png "Details Page 3")
+![Details Page Screenshot 1](assets/screenshots/about.jpg "Details Page 1")
+![Details Page Screenshot 1](assets/screenshots/evolution.jpg "Details Page 2")
+![Details Page Screenshot 1](assets/screenshots/status.jpg "Details Page 3")
 
 ### Favorites Page
 ![Favorites Page Screenshot](assets/screenshots/Screenshot_20250114_223444.png "Favorites Page")
