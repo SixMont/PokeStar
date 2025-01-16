@@ -81,7 +81,7 @@
 
 ---
 
-### Installation
+## Installation
 
 To set up and run the **PokeStar** project on your local machine using Android Studio, follow these steps:
 
