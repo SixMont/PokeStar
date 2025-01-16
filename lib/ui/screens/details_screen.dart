@@ -23,6 +23,7 @@ class DetailScreenState extends State<DetailScreen> with SingleTickerProviderSta
   late ValueNotifier<bool> isFavorite;
   late AnimationController _controller;
   late Animation<double> _animation;
+  late PageController _pageController;
   late int currentIndex;
 
   @override
@@ -38,28 +39,21 @@ class DetailScreenState extends State<DetailScreen> with SingleTickerProviderSta
       vsync: this,
     )..repeat();
     _animation = CurvedAnimation(parent: _controller, curve: Curves.linear);
+
+    _pageController = PageController(initialPage: widget.initialIndex);
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final pokeApiCubit = context.read<PokeApiCubit>();
-    final pokemon = widget.pokemonList[currentIndex];
-    Color? corPokemon = ConstsApp.getColorType(type: pokemon.type[0]);
-
-    void navigateToPokemon(int newIndex) {
-      setState(() {
-        currentIndex = newIndex;
-        isFavorite.value = pokeApiCubit.favoritePokemon.contains(widget.pokemonList[currentIndex]);
-      });
-      context.read<PokeApiCubit>().setPokemonActual(index: newIndex);
-      context.read<PokeApiV2Cubit>().getInfoSpecie(widget.pokemonList[currentIndex].name);
-    }
+    Color? corPokemon = ConstsApp.getColorType(type: widget.pokemonList[currentIndex].type[0]);
 
     return DefaultTabController(
       length: 3,
@@ -68,8 +62,7 @@ class DetailScreenState extends State<DetailScreen> with SingleTickerProviderSta
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new,
-                color: Colors.white, size: 30),
+            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 30),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -85,7 +78,7 @@ class DetailScreenState extends State<DetailScreen> with SingleTickerProviderSta
                     size: 30,
                   ),
                   onPressed: () {
-                    pokeApiCubit.toggleFavorite(pokemon);
+                    pokeApiCubit.toggleFavorite(widget.pokemonList[currentIndex]);
                     isFavorite.value = !isFavorite.value;
                   },
                 );
@@ -94,7 +87,7 @@ class DetailScreenState extends State<DetailScreen> with SingleTickerProviderSta
           ],
         ),
         body: Stack(
-          children: <Widget>[
+          children: [
             Container(
               height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
@@ -105,23 +98,121 @@ class DetailScreenState extends State<DetailScreen> with SingleTickerProviderSta
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.6,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(60),
-                    topRight: Radius.circular(60),
+            Positioned(
+              top: kToolbarHeight - 30,
+              left: 16,
+              right: 16,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        widget.pokemonList[currentIndex].name,
+                        style: const TextStyle(
+                          fontSize: 26,
+                          letterSpacing: 2.5,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        "#${widget.pokemonList[currentIndex].num}",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          letterSpacing: 2,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                child: Column(
-                  children: <Widget>[
-                    const SizedBox(height: 100, width: double.infinity),
-                    Expanded(
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 8,
+                    children: widget.pokemonList[currentIndex].type.map((type) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withAlpha((0.2 * 255).toInt()),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          type,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            letterSpacing: 2.0,
+                            fontSize: 14,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: widget.pokemonList.length,
+                      onPageChanged: (newIndex) {
+                        setState(() {
+                          currentIndex = newIndex;
+                          isFavorite.value = pokeApiCubit.favoritePokemon.contains(widget.pokemonList[currentIndex]);
+                        });
+                        context.read<PokeApiV2Cubit>().getInfoSpecie(widget.pokemonList[currentIndex].name);
+                      },
+                      itemBuilder: (context, index) {
+                        return Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Positioned(
+                              top: 120,
+                              child: RotationTransition(
+                                turns: _animation,
+                                child: Image.asset(
+                                  ConstsApp.whitePokeball,
+                                  height: 200,
+                                  color: Colors.white.withAlpha((0.2 * 255).toInt()),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              top: 120,
+                              child: Hero(
+                                tag: widget.pokemonList[index].num,
+                                child: SizedBox(
+                                  height: 200,
+                                  child: Consumer<PokeApiCubit>(
+                                    builder: (context, pokeApiCubit, child) {
+                                      return pokeApiCubit.getImage(numero: widget.pokemonList[index].num);
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(60),
+                          topRight: Radius.circular(60),
+                        ),
+                      ),
                       child: Column(
                         children: [
+                          const SizedBox(height: 20),
                           const TabBar(
                             labelColor: Colors.black,
                             unselectedLabelColor: Colors.grey,
@@ -149,116 +240,7 @@ class DetailScreenState extends State<DetailScreen> with SingleTickerProviderSta
                           ),
                         ],
                       ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            GestureDetector(
-              onHorizontalDragEnd: (details) {
-                if (details.velocity.pixelsPerSecond.dx < 0 &&
-                    currentIndex < widget.pokemonList.length - 1) {
-                  navigateToPokemon(currentIndex + 1);
-                } else if (details.velocity.pixelsPerSecond.dx > 0 &&
-                    currentIndex > 0) {
-                  navigateToPokemon(currentIndex - 1);
-                }
-              },
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Positioned(
-                    top: MediaQuery.of(context).size.height / 3 - 180,
-                    left: MediaQuery.of(context).size.width / 2 - 100,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        RotationTransition(
-                          turns: _animation,
-                          child: Image.asset(
-                            ConstsApp.whitePokeball,
-                            height: 200,
-                            color: Colors.white.withAlpha((0.2 * 255).toInt()),
-                          ),
-                        ),
-                        Hero(
-                          tag: pokemon.num,
-                          child: SizedBox(
-                            height: 200,
-                            child: Consumer<PokeApiCubit>(
-                              builder: (context, pokeApiCubit, child) {
-                                return pokeApiCubit.getImage(numero: pokemon.num);
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
-                  ),
-                  if (currentIndex > 0)
-                    Positioned(
-                      top: MediaQuery.of(context).size.height / 3 - 130,
-                      left: 16,
-                      child: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-                    ),
-                  if (currentIndex < widget.pokemonList.length - 1)
-                    Positioned(
-                      top: MediaQuery.of(context).size.height / 3 - 130,
-                      right: 16,
-                      child: const Icon(Icons.arrow_forward_ios, color: Colors.white),
-                    ),
-                ],
-              ),
-            ),
-            Positioned(
-              top: kToolbarHeight - 30,
-              left: 16,
-              right: 16,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        pokemon.name,
-                        style: const TextStyle(
-                          fontSize: 26,
-                          letterSpacing: 2.5,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        "#${pokemon.num}",
-                        style: const TextStyle(
-                          fontSize: 18,
-                          letterSpacing: 2,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Wrap(
-                    spacing: 8,
-                    children: pokemon.type.map((type) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withAlpha((0.2 * 255).toInt()),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          type,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            letterSpacing: 2.0,
-                            fontSize: 14,
-                          ),
-                        ),
-                      );
-                    }).toList(),
                   ),
                 ],
               ),
